@@ -1,12 +1,10 @@
-<div id = 'player_score'>
-    <p> Score: </p>
+<div id='score'>
+    <p>Score: </p>
 </div>
-
-<div id = 'canvas'>
-
+<div id='canvas'>
+    
 </div>
 <br>
-
 <input type='text' id='input' autocomplete="off" autofocus='autofocus'>
 
 <style>
@@ -21,12 +19,10 @@
     }
 </style>
 
-
 <script>
-    let wordsCurrentlyOnScreen = [];
-    let player_score = 0;
-    let wordBag = [
-'torpid',
+    let wordsOnScreen = [];
+    let score = 0;
+    let randWords = ['torpid',
 'expand',
 'frog',
 'jellyfish',
@@ -128,70 +124,72 @@
 'arrive',
 ];
 
-window.onload = function() {
+window.onload = function(){
     document.getElementById('input').addEventListener('keypress', function(e){
-        if (e.keyCode == 13) {
+        if(e.keyCode == 13){
             e.preventDefault();
             checkWord(this.value);
             this.value = '';
         }
     });
+
 }
 
-function createWord(inputWord) {
+function createWord(word){
     let canvas = document.getElementById('canvas');
     let div = document.createElement('div');
-    div.setAttribute('id', inputWord);
+    div.setAttribute('id', word);
     div.style.position = 'absolute';
     div.style.color = 'white';
-    div.style.left = Math.floor(Math.random()*500) + 100 + 'px';
-    div.style.top = Math.floor(Math.random()*100) + 'px';
+    div.style.left = Math.floor(Math.random()*500)+100+'px';
+    div.style.top = Math.floor(Math.random()*100)+'px';
     canvas.appendChild(div);
-    div.innerHTML = inputWord;
+    div.innerHTML = word;
+  
 }
 
-for(i = 0; i < 1000; i++) {
-    let w = wordBag[Math.floor(Math.random()*wordBag.length)];
-    setTimeout(function timer() {
+for(i=0; i<1000; i++){
+    let w = randWords[Math.floor(Math.random()*randWords.length)];
+    setTimeout(function timer(){
         createWord(w);
-        wordsCurrentlyOnScreen.push(w);
+        wordsOnScreen.push(w);
         moveWord();
-    }, i * 1500);
+    },i*1500);
 }
 
-let interval = setInterval(moveWord, 30);
+let intv = setInterval(moveWord, 30);
 
-function moveWord() {
-    for(i = 0; i < wordsCurrentlyOnScreen.length; i++) {
-        let w = document.getElementById(wordsCurrentlyOnScreen[i]);
+function moveWord(){
+    for(i=0; i<wordsOnScreen.length; i++){
+        let w = document.getElementById(wordsOnScreen[i]);
         let y = parseInt(w.style.top);
-        if (y < 400) {
+        if(y<400){
             y++;
-            w.style.top = y + 'px';
+            w.style.top = y +'px';
         }
-        else {
-            clearInterval(interval);
-            removeWord(wordsCurrentlyOnScreen[i]);
+        else{
+            clearInterval(intv);
+            removeWord(wordsOnScreen[i]);
             alert('GAME OVER');
             location.reload();
         }
     }
+    
 }
 
-function checkWord(inputWord) {
-    if(wordsCurrentlyOnScreen.includes(inputWord)) {
-        removeWord(inputWord);
-        player_score += inputWord.length;
-        i = wordsCurrentlyOnScreen.indexOf(inputWord);
-        wordsCurrentlyOnScreen.splice(i, 1);
-        document.getElementById('score').innerHTML = '<p>Score: ' + player_score + '</p>';
+function checkWord(word){
+    if(wordsOnScreen.includes(word)){
+        removeWord(word);
+        score += word.length;
+        i = wordsOnScreen.indexOf(word);
+        wordsOnScreen.splice(i, 1);
+        document.getElementById('score').innerHTML = '<p>Score: ' + score + '</p>';
     }
 }
 
-function removeWord(word) {
-    let theWord = document.getElementById(word);
-    theWord.parentNode.removeChild(w);
+function removeWord(word){
+    let w = document.getElementById(word);
+    w.parentNode.removeChild(w);
 }
-
 
 </script>
