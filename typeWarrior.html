@@ -1,0 +1,197 @@
+<div id = 'player_score'>
+    <p> Score: </p>
+</div>
+
+<div id = 'canvas'>
+
+</div>
+<br>
+
+<input type='text' id='input' autocomplete="off" autofocus='autofocus'>
+
+<style>
+    #canvas{
+        height: 400px;
+        width: 700px;
+        background: black;
+        position: relative;
+    }
+    p{
+        font-size: 30px;
+    }
+</style>
+
+
+<script>
+    let wordsCurrentlyOnScreen = [];
+    let player_score = 0;
+    let wordBag = [
+'torpid',
+'expand',
+'frog',
+'jellyfish',
+'paint',
+'terrify',
+'discovery',
+'knowledgeable',
+'eager',
+'corn',
+'belong',
+'afford',
+'crowd',
+'flaky',
+'crush',
+'system',
+'ill-fated',
+'shop',
+'ruthless',
+'choke',
+'puny',
+'mellow',
+'possible',
+'giant',
+'disagreeable',
+'omniscient',
+'force',
+'fill',
+'credit',
+'violet',
+'tie',
+'understood',
+'raspy',
+'bleach',
+'like',
+'wasteful',
+'parallel',
+'spring',
+'giraffe',
+'skinny',
+'mere',
+'panoramic',
+'damage',
+'mint',
+'nappy',
+'daffy',
+'competition',
+'humor',
+'destroy',
+'tow',
+'abstracted',
+'oceanic',
+'mix',
+'handsomely',
+'bake',
+'momentous',
+'unknown',
+'caring',
+'nut',
+'jittery',
+'immense',
+'owe',
+'endurable',
+'sand',
+'suspect',
+'dear',
+'condition',
+'curve',
+'oven',
+'quilt',
+'tight',
+'concentrate',
+'groovy',
+'pickle',
+'broad',
+'distance',
+'thread',
+'fish',
+'loving',
+'knee',
+'ants',
+'correct',
+'apparatus',
+'experience',
+'disastrous',
+'aromatic',
+'elegant',
+'stitch',
+'floor',
+'marked',
+'afterthought',
+'deer',
+'ahead',
+'school',
+'secretive',
+'guard',
+'winter',
+'shoes',
+'beautiful',
+'arrive',
+];
+
+window.onload = function() {
+    document.getElementById('input').addEventListener('keypress', function(e){
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            checkWord(this.value);
+            this.value = '';
+        }
+    });
+}
+
+function createWord(inputWord) {
+    let canvas = document.getElementById('canvas');
+    let div = document.createElement('div');
+    div.setAttribute('id', inputWord);
+    div.style.position = 'absolute';
+    div.style.color = 'white';
+    div.style.left = Math.floor(Math.random()*500) + 100 + 'px';
+    div.style.top = Math.floor(Math.random()*100) + 'px';
+    canvas.appendChild(div);
+    div.innerHTML = inputWord;
+}
+
+for(i = 0; i < 1000; i++) {
+    let w = wordBag[Math.floor(Math.random()*wordBag.length)];
+    setTimeout(function timer() {
+        createWord(w);
+        wordsCurrentlyOnScreen.push(w);
+        moveWord();
+    }, i * 1500);
+}
+
+let interval = setInterval(moveWord, 30);
+
+function moveWord() {
+    for(i = 0; i < wordsCurrentlyOnScreen.length; i++) {
+        let w = document.getElementById(wordsCurrentlyOnScreen[i]);
+        let y = parseInt(w.style.top);
+        if (y < 400) {
+            y++;
+            w.style.top = y + 'px';
+        }
+        else {
+            clearInterval(interval);
+            removeWord(wordsCurrentlyOnScreen[i]);
+            alert('GAME OVER');
+            location.reload();
+        }
+    }
+}
+
+function checkWord(inputWord) {
+    if(wordsCurrentlyOnScreen.includes(inputWord)) {
+        removeWord(inputWord);
+        player_score += inputWord.length;
+        i = wordsCurrentlyOnScreen.indexOf(inputWord);
+        wordsCurrentlyOnScreen.splice(i, 1);
+        document.getElementById('score').innerHTML = '<p>Score: ' + player_score + '</p>';
+    }
+}
+
+function removeWord(word) {
+    let theWord = document.getElementById(word);
+    theWord.parentNode.removeChild(w);
+}
+
+
+</script>
